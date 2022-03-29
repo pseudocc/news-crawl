@@ -1,0 +1,31 @@
+{
+  "type": "module",
+  "name": "news-crawl",
+  "version": "0.1.0",
+  "description": "day by day, time by time.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/pseudocc/news-crawl.git"
+  },
+  "keywords": [
+    "webcrawler",
+    "nodejs",
+    "javascript"
+  ],
+  "author": "pseudocc",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pseudocc/news-crawl/issues"
+  },
+  "homepage": "https://github.com/pseudocc/news-crawl#readme",
+  "dependencies": {
+    "dotenv": "^16.0.0",
+    "moment": "^2.29.1",
+    "node-fetch": "^3.2.3",
+    "xml2json": "^0.12.0"
+  }
+}

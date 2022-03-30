@@ -5,7 +5,7 @@
   "description": "day by day, time by time.",
   "main": "index.js",
   "scripts": {
-    "fetch": "node index.js < sitemap.list"
+    "fetch": "node index.js < sitemap.list > .today"
   },
   "repository": {
     "type": "git",

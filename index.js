@@ -22,6 +22,7 @@ function handle_line(type) {
 function prepare_env() {
   const today = moment().format('YYYY-MM-DD');
   const out_root = path.join('out', today);
+  console.log(today);
 
   dotenv.config();
   if (!fs.existsSync(out_root))

@@ -34,8 +34,11 @@ jobs:
         id: artifacts
         run: |
           TODAY=${{ steps.fetch-urls.outputs.today }}
+          ASSET=nightly-$TODAY.tar.gz
+          echo "TODAY=$TODAY"
+          echo "ASSET=$ASSET"
           tar -czf nightly.tar.gz out/$TODAY/
-          echo "::set-output name=today::$(echo nightly-$TODAY.tar.gz)"
+          echo "::set-output name=asset::$(echo $ASSET)"
   # end of jobs.fetch
 
   release:
@@ -50,8 +53,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: nightly-${{ needs.fetch.outputs.today }}
+          tag_name: ${{ github.ref }}
           release_name: Nightly ${{ needs.fetch.outputs.asset }}
+          body: |
+            Nightly Fetch
+              - Day by day
+              - Time by time
           draft: false
           prerelease: false
 

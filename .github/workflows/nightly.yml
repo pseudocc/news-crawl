@@ -9,9 +9,6 @@ jobs:
   fetch:
     name: Fetch Today's News
     runs-on: ubuntu-latest
-    outputs:
-      today: ${{ steps.fetch-urls.today }}
-      asset: ${{ steps.artifacts.asset }}
 
     steps:
       - uses: actions/checkout@v3
@@ -39,14 +36,7 @@ jobs:
           echo "ASSET=$ASSET"
           tar -czf nightly.tar.gz out/$TODAY/
           echo "::set-output name=asset::$(echo $ASSET)"
-  # end of jobs.fetch
 
-  release:
-    name: Release Today's New
-    runs-on: ubuntu-latest
-    needs: [fetch]
-    
-    steps:
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -54,7 +44,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref }}
-          release_name: Nightly ${{ needs.fetch.outputs.asset }}
+          release_name: Nightly ${{ steps.fetch-urls.outputs.today }}
           body: |
             Nightly Fetch
               - Day by day
@@ -70,6 +60,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: nightly.tar.gz
-          asset_name: ${{ needs.fetch.outputs.asset }}
+          asset_name: ${{ steps.artifacts.outputs.asset }}
           asset_content_type: application/octet-stream
-  # end of jobs.release

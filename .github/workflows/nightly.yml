@@ -32,10 +32,20 @@ jobs:
         run: |
           TODAY=${{ steps.fetch-urls.outputs.today }}
           ASSET=nightly-$TODAY.tar.gz
+          TAG=nightly-${{ github.run_id }}
           echo "TODAY=$TODAY"
           echo "ASSET=$ASSET"
+          echo "TAG=$TAG"
           tar -czf nightly.tar.gz out/$TODAY/
           echo "::set-output name=asset::$(echo $ASSET)"
+          echo "::set-output name=tag::$(echo $TAG)"
+
+      - name: Create Tag
+        id: create_tag
+        uses: rickstaa/action-create-tag@v1
+        with:
+          tag: ${{ steps.artifacts.outputs.tag }}
+          message: Nightly
 
       - name: Create Release
         id: create_release
@@ -43,7 +53,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
+          tag_name: ${{ steps.artifacts.outputs.tag }}
           release_name: Nightly ${{ steps.fetch-urls.outputs.today }}
           body: |
             Nightly Fetch

@@ -37,6 +37,8 @@ jobs:
           TODAY=${{ steps.fetch-urls.outputs.today }}
           tar -czf nightly.tar.gz out/$TODAY/
           echo "::set-output name=today::$(echo nightly-$TODAY.tar.gz)"
+    # end of jobs.fetch
+
     release:
       name: Release Today's New
       runs-on: ubuntu-latest
@@ -64,3 +66,4 @@ jobs:
           asset_path: nightly.tar.gz
           asset_name: ${{ needs.fetch.outputs.asset }}
           asset_content_type: application/octet-stream
+    # end of jobs.release

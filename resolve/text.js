@@ -16,10 +16,7 @@ export default async function text(domain, content) {
     for (const handler of xml_handlers) {
       const store = await handler(xml_obj);
       if (store) {
-        const target_file = `${domain}.txt`;
-        if (fs.existsSync(target_file))
-          fs.rmSync(target_file);
-        const fd = fs.openSync(target_file, 'w');
+        const fd = fs.openSync(`${domain}.txt`, 'w');
         for (const url of store) {
           if (domain == domain_name(url))
             fs.writeSync(fd, `${url}\n`);

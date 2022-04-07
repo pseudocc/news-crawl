@@ -1,7 +1,7 @@
-import { writeFileSync } from 'fs'
+import * as fs from 'fs';
 import { toJson } from 'xml2json';
 import { fetch_url } from '../fetch.js';
-import { array_s } from '../utils.js';
+import { array_s, domain_name } from '../utils.js';
 
 /**
  * @param {string} domain
@@ -16,7 +16,15 @@ export default async function text(domain, content) {
     for (const handler of xml_handlers) {
       const store = await handler(xml_obj);
       if (store) {
-        writeFileSync(`${domain}.txt`, store.join('\n'));
+        const target_file = `${domain}.txt`;
+        if (fs.existsSync(target_file))
+          fs.rmSync(target_file);
+        const fd = fs.openSync(target_file, 'w');
+        for (const url of store) {
+          if (domain == domain_name(url))
+            fs.writeSync(fd, `${url}\n`);
+        }
+        fs.closeSync(fd);
         return;
       }
     }
@@ -29,7 +37,8 @@ export default async function text(domain, content) {
 
 const xml_handlers = [
   sitemap_index,
-  sitemap
+  sitemap,
+  rss_feeds
 ];
 
 /**
@@ -73,6 +82,13 @@ async function sitemap(xml_obj) {
   const store = [];
   sitemap_i(store, xml_obj);
   return store.length ? store : null;
+}
+
+async function rss_feeds(xml_obj) {
+  if (!xml_obj || !xml_obj.rss || !xml_obj.rss.channel)
+    return null;
+  const items = array_s(xml_obj.rss.channel, 'item');
+  return items.length ? items.map(i => i.link) : null;
 }
 
 /**

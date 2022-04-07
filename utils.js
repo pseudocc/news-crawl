@@ -10,3 +10,16 @@ export function array_s(obj, prop_name) {
 
   return (prop instanceof Array) ? prop : [prop];
 }
+
+/**
+ * Extract domain name from URL
+ * @param {string} url 
+ * @returns {string}
+ */
+export function domain_name(url) {
+  if (!url)
+    return null;
+  const domain_regex = /http[s]*:\/\/(\w+\.)?(\w+)\.\w+/;
+  const match = domain_regex.exec(url);
+  return match ? match[2] : null;
+}

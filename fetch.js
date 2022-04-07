@@ -1,22 +1,10 @@
 import fetch from 'node-fetch';
+import { domain_name } from './utils.js';
 
 /**
  * @typedef {import('./resolve').BodyType} BodyType
  * @typedef {import('./resolve').RespResolve} RespResolve
  */
-
-/**
- * Extract domain name from URL
- * @param {string} url 
- * @returns {string}
- */
-function domain_name(url) {
-  if (!url)
-    return null;
-  const domain_regex = /http[s]*:\/\/(\w+\.)?(\w+)\.\w+/;
-  const match = domain_regex.exec(url);
-  return match ? match[2] : null;
-}
 
 /**
  * @template {BodyType} T
